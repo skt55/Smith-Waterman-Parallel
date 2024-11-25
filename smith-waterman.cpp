@@ -5,23 +5,21 @@
 
 using namespace std;
 
-std::pair<std::string, std::string> smithWaterman(const std::string &seq1, const std::string &seq2)
+std::pair<std::string, std::string> smithWaterman(const char *seq1, size_t size1, const char *seq2, size_t size2)
 {
     int match = 2;     // Score for a match
     int mismatch = -1; // Score for a mismatch
     int gap = -1;      // Score for a gap
 
-    int n = seq1.length();
-    int m = seq2.length();
-    std::vector<std::vector<int>> score(n + 1, std::vector<int>(m + 1, 0));
+    std::vector<std::vector<int>> score(size1 + 1, std::vector<int>(size2 + 1, 0));
 
     int maxScore = 0;
     int maxI = 0, maxJ = 0;
 
     // Fill the scoring matrix
-    for (int i = 1; i <= n; ++i)
+    for (size_t i = 1; i <= size1; ++i)
     {
-        for (int j = 1; j <= m; ++j)
+        for (size_t j = 1; j <= size2; ++j)
         {
             int matchScore = (seq1[i - 1] == seq2[j - 1]) ? match : mismatch;
             score[i][j] = std::max({0,
@@ -39,7 +37,7 @@ std::pair<std::string, std::string> smithWaterman(const std::string &seq1, const
 
     // Backtrack to find the aligned sequences
     std::string alignedSeq1, alignedSeq2;
-    int i = maxI, j = maxJ;
+    size_t i = maxI, j = maxJ;
 
     while (i > 0 && j > 0 && score[i][j] > 0)
     {

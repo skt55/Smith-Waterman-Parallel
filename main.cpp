@@ -11,7 +11,14 @@ void runTests()
     std::string seq1, seq2;
     if (inputFile >> seq1 >> seq2)
     {
-        std::pair<std::string, std::string> out = smithWaterman(seq1, seq2);
+        // Convert strings to char arrays
+        const char *seq1Ptr = seq1.c_str();
+        const char *seq2Ptr = seq2.c_str();
+        size_t size1 = seq1.length();
+        size_t size2 = seq2.length();
+
+        // Call smithWaterman with char pointers and their sizes
+        std::pair<std::string, std::string> out = smithWaterman(seq1Ptr, size1, seq2Ptr, size2);
         outputFile << out.first << " " << out.second << std::endl;
     }
 
