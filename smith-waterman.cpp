@@ -1,6 +1,7 @@
 #include <algorithm>
 #include <iostream>
 #include <bits/stdc++.h>
+#include "smith-waterman.hpp"
 
 using namespace std;
 

@@ -1,6 +1,6 @@
 #include <iostream>
 #include <chrono>
-#include "smith-waterman.h"
+#include "smith-waterman.hpp"
 
 void runTests()
 {
