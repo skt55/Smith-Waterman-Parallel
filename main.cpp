@@ -1,16 +1,22 @@
 #include <iostream>
 #include <chrono>
+#include <fstream>
 #include "smith-waterman.hpp"
 
 void runTests()
 {
-    std::string seq1 = "AGCT";
-    std::string seq2 = "AGCT";
-    std::cout << "Test 1: " << smithWaterman(seq1, seq2) << std::endl;
+    std::ifstream inputFile("input.txt");
+    std::ofstream outputFile("output.txt");
 
-    seq1 = "AGCTG";
-    seq2 = "AGCT";
-    std::cout << "Test 2: " << smithWaterman(seq1, seq2) << std::endl;
+    std::string seq1, seq2;
+    if (inputFile >> seq1 >> seq2)
+    {
+        std::pair<std::string, std::string> out = smithWaterman(seq1, seq2);
+        outputFile << out.first << " " << out.second << std::endl;
+    }
+
+    inputFile.close();
+    outputFile.close();
 }
 
 int main()

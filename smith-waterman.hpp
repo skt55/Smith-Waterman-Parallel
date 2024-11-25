@@ -6,6 +6,6 @@
 #include <vector>
 
 // Function to perform the Smith-Waterman algorithm
-int smithWaterman(const std::string &seq1, const std::string &seq2);
+std::pair<std::string, std::string> smithWaterman(const std::string &seq1, const std::string &seq2);
 
 #endif // SMITH_WATERMAN_H
