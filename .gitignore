@@ -1,1 +1,5 @@
 .vscode/
+main.o
+output.txt
+smith_waterman
+smith-waterman.o
