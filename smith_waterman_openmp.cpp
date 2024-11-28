@@ -11,7 +11,7 @@ const int _BLOCK_SIZE_ = 16;
 #define MISMATCH_SCORE -1
 #define GAP_PENALTY -1
 
-
+//start and end are inclusive
 std::tuple<int, int, int> process_block(int start_i, int end_i, int start_j, int end_j, 
                    std::vector<std::vector<int>>& matrix, const std::string& seq1, const std::string& seq2) {
 
@@ -58,8 +58,9 @@ std::pair<std::string, std::string> smithWaterman(const char *seq1, size_t size1
     // Process blocks in parallel
     for (size_t start_i = 1; start_i < size1; start_i += _BLOCK_SIZE_) {
         for (size_t start_j = 1; start_j < size2; start_j += _BLOCK_SIZE_) {
-            int end_i = max(start_i + _BLOCK_SIZE_ - 1, size1);
-            int end_j = max(start_j + _BLOCK_SIZE_ - 1, size2);
+            int end_i = min(start_i + _BLOCK_SIZE_ - 1, size1);
+            int end_j = min(start_j + _BLOCK_SIZE_ - 1, size2);
+            std::cout << start_i << "_" << end_i << "|" << start_j << "_" << end_j << std::endl;
             block_out = process_block(start_i, end_i, start_j, end_j, score, seq1, seq2);
             if (std::get<0>(block_out) > maxScore) {
                 maxScore = std::get<0>(block_out);
