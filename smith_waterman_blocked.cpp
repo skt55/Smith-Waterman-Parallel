@@ -2,7 +2,6 @@
 #include <iostream>
 #include <bits/stdc++.h>
 #include "smith-waterman.hpp"
-#include <omp.h>
 
 using namespace std;
 
@@ -56,44 +55,19 @@ std::pair<std::string, std::string> smithWaterman(const char *seq1, size_t size1
     int maxI = 0, maxJ = 0;
 
     std::tuple<int, int, int> block_out;
-    int num_blocks_seq1 = (size1 + _BLOCK_SIZE_ - 1) / _BLOCK_SIZE_;
-    //includes irregularly shaped blocks
-    int num_blocks_seq2 = (size2 + _BLOCK_SIZE_ - 1) / _BLOCK_SIZE_;
-
-    //below, k, block_num_x, block_num_y start at 0
-
-    //k is the number of the anti-diagonal
-    //it is also the sum of the indexes of a block in it (if square)
-    for (int k = 0; k < num_blocks_seq1 + num_blocks_seq2 - 1; ++k) {
-                                            // -2 since its 0 indexed
-
-        // is going through the diagonal
-        // block_num_x + block_num_y = k
-
-        // x is in i direction
-        // y is in j direction
-        // the matrix is j major (column major)
-        // thesse diagonals are going up and to the right
-        #pragma omp parallel for schedule(dynamic)
-        for (int block_num_x = 0; block_num_x <= k; ++block_num_x) {
-            int block_num_y = k - block_num_x;
-            // Check if the bounds
-            // diagonals go up right, so need to check negative y, overbound x, and overbound y
-            if (block_num_y >= 0 && block_num_x < num_blocks_seq1 && block_num_y < num_blocks_seq2) {
-                int start_i = block_num_x * _BLOCK_SIZE_ + 1;
-                int start_j = block_num_y * _BLOCK_SIZE_ + 1;
-                int end_i = min(start_i + _BLOCK_SIZE_ - 1, (int)size1);
-                int end_j = min(start_j + _BLOCK_SIZE_ - 1, (int)size2);
-                // std::cout << start_i << "_" << end_i << "|" << start_j << "_" << end_j << " num_x = " << block_num_x << " num_y = " << block_num_y << std::endl;
-                block_out = process_block(start_i, end_i, start_j, end_j, score, seq1, seq2);
-                if (std::get<0>(block_out) > maxScore) {
-                    maxScore = std::get<0>(block_out);
-                    maxI = std::get<1>(block_out);
-                    maxJ = std::get<2>(block_out);
-                }
+    // Process blocks in parallel
+    for (size_t start_i = 1; start_i < size1; start_i += _BLOCK_SIZE_) {
+        for (size_t start_j = 1; start_j < size2; start_j += _BLOCK_SIZE_) {
+            int end_i = min(start_i + _BLOCK_SIZE_ - 1, size1);
+            int end_j = min(start_j + _BLOCK_SIZE_ - 1, size2);
+            //std::cout << start_i << "_" << end_i << "|" << start_j << "_" << end_j << std::endl;
+            block_out = process_block(start_i, end_i, start_j, end_j, score, seq1, seq2);
+            if (std::get<0>(block_out) > maxScore) {
+                maxScore = std::get<0>(block_out);
+                maxI = std::get<1>(block_out);
+                maxJ = std::get<2>(block_out);
             }
         }
-        // std::cout << std::endl;  // New line for each anti-diagonal
     }
 
     // Backtrack to find the aligned sequences
