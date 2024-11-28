@@ -28,9 +28,15 @@ void runTests(int lineNumber)
                 const char *seq2Ptr = seq2.c_str();
                 size_t size1 = seq1.length();
                 size_t size2 = seq2.length();
-
+                std::cout << "Finished String Loading" << std::endl;
                 // Call smithWaterman with char pointers and their sizes
+
+                auto start = std::chrono::high_resolution_clock::now();
                 std::pair<std::string, std::string> out = smithWaterman(seq1Ptr, size1, seq2Ptr, size2);
+                auto end = std::chrono::high_resolution_clock::now();
+                
+                std::chrono::duration<double> duration = end - start;
+                std::cout << "Total time taken: " << duration.count() << " seconds" << std::endl;
                 outputFile << out.first << " " << out.second << std::endl;
             } else {
                 std::cerr << "Error: Line " << lineNumber << " is not properly formatted!" << std::endl;
@@ -63,13 +69,13 @@ int main(int argc, char* argv[])
         return 1;
     }
 
-    auto start = std::chrono::high_resolution_clock::now();
+    //auto start = std::chrono::high_resolution_clock::now();
 
     runTests(lineNumber);
 
-    auto end = std::chrono::high_resolution_clock::now();
-    std::chrono::duration<double> duration = end - start;
-    std::cout << "Total time taken: " << duration.count() << " seconds" << std::endl;
+    //auto end = std::chrono::high_resolution_clock::now();
+    //std::chrono::duration<double> duration = end - start;
+    //std::cout << "Total time taken: " << duration.count() << " seconds" << std::endl;
 
     return 0;
 }

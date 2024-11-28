@@ -5,7 +5,7 @@
 
 using namespace std;
 
-const int _BLOCK_SIZE_ = 16;
+const int _BLOCK_SIZE_ = 64;
 // Define gap penalties and match/mismatch scores
 #define MATCH_SCORE 2
 #define MISMATCH_SCORE -1
