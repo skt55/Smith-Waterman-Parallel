@@ -5,3 +5,5 @@ smith_waterman
 smith-waterman.o
 input_scramble.txt
 output_scramble.txt
+base
+openmp
