@@ -3,3 +3,5 @@ main.o
 output.txt
 smith_waterman
 smith-waterman.o
+input_scramble.txt
+output_scramble.txt
