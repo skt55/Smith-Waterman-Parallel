@@ -13,7 +13,7 @@ const int _BLOCK_SIZE_ = 64;
 
 //start and end are inclusive
 std::tuple<int, int, int> process_block(int start_i, int end_i, int start_j, int end_j, 
-                   std::vector<std::vector<char>>& matrix, const std::string& seq1, const std::string& seq2) {
+                   std::vector<std::vector<short>>& matrix, const std::string& seq1, const std::string& seq2) {
 
     int match = 2;     // Score for a match
     int mismatch = -1; // Score for a mismatch
@@ -49,7 +49,7 @@ std::pair<std::string, std::string> smithWaterman(const char *seq1, size_t size1
     int mismatch = -1; // Score for a mismatch
     int gap = -1;      // Score for a gap
 
-    std::vector<std::vector<char>> score(size1 + 1, std::vector<char>(size2 + 1, 0));
+    std::vector<std::vector<short>> score(size1 + 1, std::vector<short>(size2 + 1, 0));
 
     int maxScore = 0;
     int maxI = 0, maxJ = 0;
