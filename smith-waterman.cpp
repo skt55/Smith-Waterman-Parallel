@@ -11,7 +11,7 @@ std::pair<std::string, std::string> smithWaterman(const char *seq1, size_t size1
     int mismatch = -1; // Score for a mismatch
     int gap = -1;      // Score for a gap
 
-    std::vector<std::vector<short>> score(size1 + 1, std::vector<short>(size2 + 1, 0));
+    std::vector<std::vector<int>> score(size1 + 1, std::vector<int>(size2 + 1, 0));
 
     int maxScore = 0;
     int maxI = 0, maxJ = 0;
