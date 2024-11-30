@@ -21,7 +21,7 @@ blocked: main.cpp smith_waterman_blocked.cpp
 	$(CPP) $^ -o $@ $(CFLAGS) $(COPTFLAGS)
 
 openmp: main.cpp smith_waterman_openmp.cpp
-	$(CPP) $^ -o $@ $(CFLAGS) $(COPTFLAGS)
+	$(CPP) $^ -o $@ $(CFLAGS) $(COPTFLAGS) -fopenmp
 
 .PHONY: clean
 
