@@ -9,7 +9,7 @@ NVCC=nvcc
 NVCCFLAGS=-DCUDA -Xptxas -O3 -arch=sm_80 -use_fast_math
 
 
-all: base blocked openmp
+all: base blocked openmp column
 
 base: main.cpp smith-waterman.cpp
 	$(CPP) $^ -o $@ $(CFLAGS) $(OPTFLAGS)
@@ -23,6 +23,9 @@ blocked: main.cpp smith_waterman_blocked.cpp
 openmp: main.cpp smith_waterman_openmp.cpp
 	$(CPP) $^ -o $@ $(CFLAGS) $(COPTFLAGS) -fopenmp
 
+column: main.cpp smith_waterman_column.cpp
+	$(CPP) $^ -o $@ $(CFLAGS) $(COPTFLAGS) -fopenmp
+
 .PHONY: clean
 
 clean:
@@ -33,3 +36,4 @@ clean:
 	rm -f openmp
 	rm -f cuda
 	rm -f blocked
+	rm -f column
