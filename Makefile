@@ -32,3 +32,4 @@ clean:
 	rm -f base
 	rm -f openmp
 	rm -f cuda
+	rm -f blocked
