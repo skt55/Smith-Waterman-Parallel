@@ -3,6 +3,7 @@
 #include <bits/stdc++.h>
 #include "smith-waterman.hpp"
 #include <omp.h>
+#include <chrono>
 
 using namespace std;
 
@@ -50,21 +51,24 @@ std::pair<std::string, std::string> smithWaterman(const char *seq1, size_t size1
     int mismatch = -1; // Score for a mismatch
     int gap = -1;      // Score for a gap
 
+    //MATRIX ALLOCATION + TIMING HARNESS
+    auto start = std::chrono::high_resolution_clock::now();
     std::vector<std::vector<int>> score(size1 + 1, std::vector<int>(size2 + 1, 0));
+    auto end = std::chrono::high_resolution_clock::now();
+    std::chrono::duration<double> duration = end - start;
+    std::cout << "Matrix Allocation Time: " << duration.count() << " seconds" << std::endl;
 
     int maxScore = 0;
     int maxI = 0, maxJ = 0;
-
     std::tuple<int, int, int> block_out;
     int num_blocks_seq1 = (size1 + _BLOCK_SIZE_ - 1) / _BLOCK_SIZE_;
-
     //std::cout<<num_blocks_seq1<<endl;
     //includes irregularly shaped blocks
     int num_blocks_seq2 = (size2 + _BLOCK_SIZE_ - 1) / _BLOCK_SIZE_;
-
     //std::cout<<num_blocks_seq2<<endl;
 
 
+    start = std::chrono::high_resolution_clock::now();
     #pragma omp parallel num_threads(num_blocks_seq1)
     {
         //this will run total number of blocks per column times
@@ -96,11 +100,16 @@ std::pair<std::string, std::string> smithWaterman(const char *seq1, size_t size1
 
         } 
     }
+    end = std::chrono::high_resolution_clock::now();
+    duration = end - start;
+    std::cout << "Matrix Processing Time: " << duration.count() << " seconds" << std::endl;
 
+
+    start = std::chrono::high_resolution_clock::now();
     // Backtrack to find the aligned sequences
     std::string alignedSeq1, alignedSeq2;
     size_t i = maxI, j = maxJ;
-
+    //BACKTRACKING
     while (i > 0 && j > 0 && score[i][j] > 0)
     {
         if (seq1[i - 1] == seq2[j - 1])
@@ -123,6 +132,9 @@ std::pair<std::string, std::string> smithWaterman(const char *seq1, size_t size1
             j--;
         }
     }
+    end = std::chrono::high_resolution_clock::now();
+    duration = end - start;
+    std::cout << "Backtrack Matrix Time:  " << duration.count() << " seconds" << std::endl;
 
     // Reverse the aligned sequences
     std::reverse(alignedSeq1.begin(), alignedSeq1.end());

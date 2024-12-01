@@ -2,6 +2,7 @@
 #include <iostream>
 #include <bits/stdc++.h>
 #include "smith-waterman.hpp"
+#include <chrono>
 
 using namespace std;
 
@@ -11,11 +12,17 @@ std::pair<std::string, std::string> smithWaterman(const char *seq1, size_t size1
     int mismatch = -1; // Score for a mismatch
     int gap = -1;      // Score for a gap
 
+    //MATRIX ALLOCATION + TIMING HARNESS
+    auto start = std::chrono::high_resolution_clock::now();
     std::vector<std::vector<int>> score(size1 + 1, std::vector<int>(size2 + 1, 0));
+    auto end = std::chrono::high_resolution_clock::now();
+    std::chrono::duration<double> duration = end - start;
+    std::cout << "Matrix Allocation Time: " << duration.count() << " seconds" << std::endl;
 
     int maxScore = 0;
     int maxI = 0, maxJ = 0;
 
+    start = std::chrono::high_resolution_clock::now();
     // Fill the scoring matrix
     for (size_t i = 1; i <= size1; ++i)
     {
@@ -34,11 +41,16 @@ std::pair<std::string, std::string> smithWaterman(const char *seq1, size_t size1
             }
         }
     }
+    end = std::chrono::high_resolution_clock::now();
+    duration = end - start;
+    std::cout << "Matrix Processing Time: " << duration.count() << " seconds" << std::endl;
 
+
+    start = std::chrono::high_resolution_clock::now();
     // Backtrack to find the aligned sequences
     std::string alignedSeq1, alignedSeq2;
     size_t i = maxI, j = maxJ;
-
+    //BACKTRACKING
     while (i > 0 && j > 0 && score[i][j] > 0)
     {
         if (seq1[i - 1] == seq2[j - 1])
@@ -61,6 +73,10 @@ std::pair<std::string, std::string> smithWaterman(const char *seq1, size_t size1
             j--;
         }
     }
+    end = std::chrono::high_resolution_clock::now();
+    duration = end - start;
+    std::cout << "Backtrack Matrix Time:  " << duration.count() << " seconds" << std::endl;
+
 
     // Reverse the aligned sequences
     std::reverse(alignedSeq1.begin(), alignedSeq1.end());
