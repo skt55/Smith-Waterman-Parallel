@@ -4,22 +4,19 @@
 #include "smith-waterman.hpp"
 #include <omp.h>
 #include <chrono>
+#include "constants.hpp"
 
 using namespace std;
 
 const int _BLOCK_SIZE_ = 64;
-// Define gap penalties and match/mismatch scores
-#define MATCH_SCORE 2
-#define MISMATCH_SCORE -1
-#define GAP_PENALTY -1
 
 //start and end are inclusive
 std::tuple<int, int, int> process_block(int start_i, int end_i, int start_j, int end_j, 
                    std::vector<std::vector<int>>& matrix, const std::string& seq1, const std::string& seq2) {
 
-    int match = 2;     // Score for a match
-    int mismatch = -1; // Score for a mismatch
-    int gap = -1;      // Score for a gap
+    int match = MATCH_SCORE;     // Score for a match
+    int mismatch = MISMATCH_SCORE; // Score for a mismatch
+    int gap = GAP_PENALTY;      // Score for a gap
 
     int maxScore = 0;
     int maxI = 0;
@@ -47,9 +44,9 @@ std::tuple<int, int, int> process_block(int start_i, int end_i, int start_j, int
 }
 
 std::pair<std::string, std::string> smithWaterman(const char *seq1, size_t size1, const char *seq2, size_t size2) {
-    int match = 2;     // Score for a match
-    int mismatch = -1; // Score for a mismatch
-    int gap = -1;      // Score for a gap
+    int match = MATCH_SCORE;     // Score for a match
+    int mismatch = MISMATCH_SCORE; // Score for a mismatch
+    int gap = GAP_PENALTY;      // Score for a gap
 
     //MATRIX ALLOCATION + TIMING HARNESS
     auto start = std::chrono::high_resolution_clock::now();

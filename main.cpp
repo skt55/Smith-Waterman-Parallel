@@ -3,6 +3,7 @@
 #include <fstream>
 #include "smith-waterman.hpp"
 #include <sstream>
+#include "constants.hpp"
 
 void runTests(int lineNumber)
 {
