@@ -104,9 +104,7 @@ std::pair<std::string, std::string> smithWaterman(
     cudaMemcpy(hscore.data(), cuda_score, (size1 + 1) * (size2 + 1) * sizeof(int), cudaMemcpyDeviceToHost);
     auto start5 = std::chrono::high_resolution_clock::now();
 
-    cudaFree(cuda_seq1);
-    cudaFree(cuda_seq2);
-    cudaFree(cuda_score);
+    
     int maxI = 0,maxJ;
     int count = 0;
     for(int row = 0;row<=size1;++row){
@@ -121,6 +119,7 @@ std::pair<std::string, std::string> smithWaterman(
         }
        
     }
+    auto start6 = std::chrono::high_resolution_clock::now();
 
     // Backtrack to find the aligned sequences
     std::string alignedSeq1, alignedSeq2;
@@ -148,7 +147,12 @@ std::pair<std::string, std::string> smithWaterman(
         }
     }
 
-    auto start6 = std::chrono::high_resolution_clock::now();
+    auto start7 = std::chrono::high_resolution_clock::now();
+
+    cudaFree(cuda_seq1);
+    cudaFree(cuda_seq2);
+    cudaFree(cuda_score);   
+    auto start8 = std::chrono::high_resolution_clock::now();
 
     std::chrono::duration<double> duration = start2 - start1;
     std::cout << "Memory1 time taken: " << duration.count() << " seconds" << std::endl;
@@ -163,11 +167,17 @@ std::pair<std::string, std::string> smithWaterman(
     std::cout << "cpy2 time taken: " << duration3.count() << " seconds" << std::endl;
 
     std::chrono::duration<double> duration4 = start6 - start5;
-    std::cout << "backtrack time taken: " << duration4.count() << " seconds" << std::endl;
+    std::cout << "to get max indices time taken: " << duration4.count() << " seconds" << std::endl;
+
+    std::chrono::duration<double> duration5 = start7 - start6;
+    std::cout << "backtrack time taken: " << duration5.count() << " seconds" << std::endl;
+
+     std::chrono::duration<double> duration6 = start8 - start7;
+    std::cout << "cuda free time taken: " << duration6.count() << " seconds" << std::endl;
     // Reverse the aligned sequences
     std::reverse(alignedSeq1.begin(), alignedSeq1.end());
     std::reverse(alignedSeq2.begin(), alignedSeq2.end());
-    
+    std::cout << "Total cuda time is " << duration.count() + duration1.count() + duration2.count() + duration3.count() + duration6.count()<< "seconds" << std::endl;
     return {alignedSeq1, alignedSeq2}; // Return the aligned sequences
 }
 
