@@ -14,7 +14,7 @@ all: base blocked openmp column
 base: main.cpp smith-waterman.cpp
 	$(CPP) $^ -o $@ $(CFLAGS) $(OPTFLAGS)
 
-cuda: main.cpp cuda.cu
+cuda: main.cpp smith_waterman_cuda.cu
 	$(NVCC) $^ -o $@ $(NVCCFLAGS)
 
 blocked: main.cpp smith_waterman_blocked.cpp
