@@ -1,0 +1,176 @@
+--------------------------------------------------------------------------------
+I1 cache:         32768 B, 64 B, 8-way associative
+D1 cache:         32768 B, 64 B, 8-way associative
+LL cache:         268435456 B, 64 B, direct-mapped
+Command:          ./openmp 6
+Data file:        cachegrind.out.509165
+Events recorded:  Ir I1mr ILmr Dr D1mr DLmr Dw D1mw DLmw
+Events shown:     Ir I1mr ILmr Dr D1mr DLmr Dw D1mw DLmw
+Event sort order: Ir I1mr ILmr Dr D1mr DLmr Dw D1mw DLmw
+Thresholds:       0.1 100 100 100 100 100 100 100 100
+Include dirs:     
+User annotated:   
+Auto-annotation:  on
+
+--------------------------------------------------------------------------------
+Ir                       I1mr           ILmr           Dr                      D1mr               DLmr            Dw                   D1mw               DLmw               
+--------------------------------------------------------------------------------
+168,750,526,603 (100.0%) 5,677 (100.0%) 3,797 (100.0%) 24,308,524,581 (100.0%) 3,611,525 (100.0%) 34,983 (100.0%) 192,893,072 (100.0%) 4,562,643 (100.0%) 1,678,765 (100.0%)  PROGRAM TOTALS
+
+--------------------------------------------------------------------------------
+Ir                       I1mr           ILmr         Dr                      D1mr               DLmr            Dw                   D1mw               DLmw                file:function
+--------------------------------------------------------------------------------
+168,034,034,155 (99.58%) 1,188 (20.93%) 874 (23.02%) 24,007,067,080 (98.76%)   298,844 ( 8.27%)    686 ( 1.96%)   2,059,282 ( 1.07%)   248,981 ( 5.46%)     3,582 ( 0.21%)  ???:???
+    521,961,702 ( 0.31%)    18 ( 0.32%)  18 ( 0.47%)    127,944,557 ( 0.53%)   420,364 (11.64%)    281 ( 0.80%)  25,476,133 (13.21%) 1,562,499 (34.25%)    11,242 ( 0.67%)  /global/homes/s/skt55/final_project/Smith-Waterman-Parallel/smith_waterman_openmp.cpp:process_block(int, int, int, int, std::vector<std::vector<int, std::allocator<int> >, std::allocator<std::vector<int, std::allocator<int> > > >&, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)
+
+--------------------------------------------------------------------------------
+-- Auto-annotated source: /global/homes/s/skt55/final_project/Smith-Waterman-Parallel/smith_waterman_openmp.cpp
+--------------------------------------------------------------------------------
+Ir                   I1mr        ILmr        Dr                  D1mr             DLmr         Dw                  D1mw               DLmw            
+
+-- line 7 ----------------------------------------
+          .           .           .                   .                .            .                   .                  .               .           #include "constants.hpp"
+          .           .           .                   .                .            .                   .                  .               .           
+          .           .           .                   .                .            .                   .                  .               .           using namespace std;
+          .           .           .                   .                .            .                   .                  .               .           
+          .           .           .                   .                .            .                   .                  .               .           const int _BLOCK_SIZE_ = 64;
+          .           .           .                   .                .            .                   .                  .               .           
+          .           .           .                   .                .            .                   .                  .               .           //start and end are inclusive
+          .           .           .                   .                .            .                   .                  .               .           std::tuple<int, int, int> process_block(int start_i, int end_i, int start_j, int end_j, 
+     49,928 ( 0.00%)  1 ( 0.02%)  1 ( 0.03%)          0                0            0              43,687 ( 0.02%)         0               0                              std::vector<std::vector<int>>& matrix, const std::string& seq1, const std::string& seq2) {
+          .           .           .                   .                .            .                   .                  .               .           
+          .           .           .                   .                .            .                   .                  .               .               int match = MATCH_SCORE;     // Score for a match
+          .           .           .                   .                .            .                   .                  .               .               int mismatch = MISMATCH_SCORE; // Score for a mismatch
+          .           .           .                   .                .            .                   .                  .               .               int gap = GAP_PENALTY;      // Score for a gap
+          .           .           .                   .                .            .                   .                  .               .           
+     24,964 ( 0.00%)  0           0                   0                0            0                   0                  0               0               int maxScore = 0;
+      6,241 ( 0.00%)  0           0                   0                0            0                   0                  0               0               int maxI = 0;
+      6,241 ( 0.00%)  0           0                   0                0            0                   0                  0               0               int maxJ = 0;
+          .           .           .                   .                .            .                   .                  .               .           
+  2,407,446 ( 0.00%)  1 ( 0.02%)  1 ( 0.03%)  1,586,241 ( 0.01%)       0            0               6,241 ( 0.00%)         0               0               for (size_t i = start_i; i <= end_i; ++i)
+          .           .           .                   .                .            .                   .                  .               .               {
+ 42,647,482 ( 0.03%)  2 ( 0.04%)  2 ( 0.05%)    790,000 ( 0.00%)       0            0             395,000 ( 0.20%)         0               0                   for (size_t j = start_j; j <= end_j; ++j)
+          .           .           .                   .                .            .                   .                  .               .                   {
+          .           .           .                   .                .            .                   .                  .               .                       
+131,657,482 ( 0.08%)  6 ( 0.11%)  6 ( 0.16%) 50,395,000 ( 0.21%) 395,019 (10.94%) 279 ( 0.80%)          0                  0               0                       int matchScore = (seq1[i - 1] == seq2[j - 1]) ? match : mismatch;
+ 25,000,000 ( 0.01%)  0           0                   0                0            0          25,000,000 (12.96%) 1,562,499 (34.25%) 11,242 ( 0.67%)              matrix[i][j] = std::max({0,
+ 51,185,000 ( 0.03%)  1 ( 0.02%)  1 ( 0.03%) 25,000,000 ( 0.10%)   6,241 ( 0.17%)   0                   0                  0               0                                               matrix[i - 1][j - 1] + matchScore,
+167,565,000 ( 0.10%)  2 ( 0.04%)  2 ( 0.05%) 25,000,000 ( 0.10%)  18,947 ( 0.52%)   0                   0                  0               0                                               matrix[i - 1][j] + gap,
+ 50,000,000 ( 0.03%)  3 ( 0.05%)  3 ( 0.08%) 25,000,000 ( 0.10%)     157 ( 0.00%)   2 ( 0.01%)          0                  0               0                                               matrix[i][j - 1] + gap});
+ 50,000,000 ( 0.03%)  2 ( 0.04%)  2 ( 0.05%)          0                0            0                   0                  0               0                       if (matrix[i][j] > maxScore)
+          .           .           .                   .                .            .                   .                  .               .                       {
+          .           .           .                   .                .            .                   .                  .               .                           maxScore = matrix[i][j];
+    294,048 ( 0.00%)  0           0                   0                0            0                   0                  0               0                           maxI = i;
+  1,067,942 ( 0.00%)  0           0             129,629 ( 0.00%)       0            0              31,205 ( 0.02%)         0               0                           maxJ = j;
+          .           .           .                   .                .            .                   .                  .               .                       }
+          .           .           .                   .                .            .                   .                  .               .                   }
+          .           .           .                   .                .            .                   .                  .               .               }
+          .           .           .                   .                .            .                   .                  .               .               return std::make_tuple(maxScore, maxI, maxJ);
+     49,928 ( 0.00%)  0           0              43,687 ( 0.00%)       0            0                   0                  0               0           }
+          .           .           .                   .                .            .                   .                  .               .           
+         17 ( 0.00%)  2 ( 0.04%)  2 ( 0.05%)          1 ( 0.00%)       0            0                  11 ( 0.00%)         0               0           std::pair<std::string, std::string> smithWaterman(const char *seq1, size_t size1, const char *seq2, size_t size2) {
+          .           .           .                   .                .            .                   .                  .               .               int match = MATCH_SCORE;     // Score for a match
+          .           .           .                   .                .            .                   .                  .               .               int mismatch = MISMATCH_SCORE; // Score for a mismatch
+          .           .           .                   .                .            .                   .                  .               .               int gap = GAP_PENALTY;      // Score for a gap
+          .           .           .                   .                .            .                   .                  .               .           
+          .           .           .                   .                .            .                   .                  .               .               //MATRIX ALLOCATION + TIMING HARNESS
+          2 ( 0.00%)  0           0                   0                0            0                   2 ( 0.00%)         0               0               auto start = std::chrono::high_resolution_clock::now();
+          2 ( 0.00%)  0           0                   0                0            0                   0                  0               0               std::vector<std::vector<int>> score(size1 + 1, std::vector<int>(size2 + 1, 0));
+          1 ( 0.00%)  0           0                   0                0            0                   1 ( 0.00%)         0               0               auto end = std::chrono::high_resolution_clock::now();
+          .           .           .                   .                .            .                   .                  .               .               std::chrono::duration<double> duration = end - start;
+          .           .           .                   .                .            .                   .                  .               .               std::cout << "Matrix Allocation Time: " << duration.count() << " seconds" << std::endl;
+          .           .           .                   .                .            .                   .                  .               .           
+          .           .           .                   .                .            .                   .                  .               .           
+          3 ( 0.00%)  0           0                   0                0            0                   0                  0               0               int maxScore = 0;
+          2 ( 0.00%)  0           0                   0                0            0                   0                  0               0               int maxI = 0, maxJ = 0;
+          2 ( 0.00%)  0           0                   0                0            0                   2 ( 0.00%)         0               0               std::tuple<int, int, int> block_out;
+          3 ( 0.00%)  0           0                   0                0            0                   0                  0               0               int num_blocks_seq1 = (size1 + _BLOCK_SIZE_ - 1) / _BLOCK_SIZE_;
+          .           .           .                   .                .            .                   .                  .               .               //includes irregularly shaped blocks
+          3 ( 0.00%)  1 ( 0.02%)  1 ( 0.03%)          0                0            0                   1 ( 0.00%)         0               0               int num_blocks_seq2 = (size2 + _BLOCK_SIZE_ - 1) / _BLOCK_SIZE_;
+          .           .           .                   .                .            .                   .                  .               .           
+          .           .           .                   .                .            .                   .                  .               .           
+          2 ( 0.00%)  0           0                   0                0            0                   2 ( 0.00%)         0               0               start = std::chrono::high_resolution_clock::now();
+          .           .           .                   .                .            .                   .                  .               .               //below, k, block_num_x, block_num_y start at 0
+          .           .           .                   .                .            .                   .                  .               .               //k is the number of the anti-diagonal
+          .           .           .                   .                .            .                   .                  .               .               //it is also the sum of the indexes of a block in it (if square)
+        408 ( 0.00%)  1 ( 0.02%)  1 ( 0.03%)         80 ( 0.00%)      78 ( 0.00%)   1 ( 0.00%)          2 ( 0.00%)         0               0               for (int k = 0; k < num_blocks_seq1 + num_blocks_seq2 - 1; ++k) {
+          .           .           .                   .                .            .                   .                  .               .                                                       // -2 since its 0 indexed
+          .           .           .                   .                .            .                   .                  .               .                   // is going through the diagonal
+          .           .           .                   .                .            .                   .                  .               .                   // block_num_x + block_num_y = k
+          .           .           .                   .                .            .                   .                  .               .           
+          .           .           .                   .                .            .                   .                  .               .                   // x is in i direction
+          .           .           .                   .                .            .                   .                  .               .                   // y is in j direction
+          .           .           .                   .                .            .                   .                  .               .                   // the matrix is j major (column major)
+          .           .           .                   .                .            .                   .                  .               .                   // thesse diagonals are going up and to the right
+  1,490,639 ( 0.00%) 11 ( 0.19%) 11 ( 0.29%)    563,631 ( 0.00%)     652 ( 0.02%)   2 ( 0.01%)    483,562 ( 0.25%)   120,262 ( 2.64%)  1,609 ( 0.10%)          #pragma omp parallel for schedule(dynamic)
+     40,192 ( 0.00%)  0           0                   0                0            0                   0                  0               0                   for (int block_num_x = 0; block_num_x <= k; ++block_num_x) {
+          .           .           .                   .                .            .                   .                  .               .                       int block_num_y = k - block_num_x;
+          .           .           .                   .                .            .                   .                  .               .                       // Check if the bounds
+          .           .           .                   .                .            .                   .                  .               .                       // diagonals go up right, so need to check negative y, overbound x, and overbound y
+    136,433 ( 0.00%)  1 ( 0.02%)  1 ( 0.03%)     12,403 ( 0.00%)       0            0                   0                  0               0                       if (block_num_y >= 0 && block_num_x < num_blocks_seq1 && block_num_y < num_blocks_seq2) {
+     49,928 ( 0.00%)  0           0              12,482 ( 0.00%)       1 ( 0.00%)   0               6,241 ( 0.00%)         0               0                           int start_i = block_num_x * _BLOCK_SIZE_ + 1;
+     12,482 ( 0.00%)  0           0                   0                0            0               6,241 ( 0.00%)         0               0                           int start_j = block_num_y * _BLOCK_SIZE_ + 1;
+     12,482 ( 0.00%)  0           0                   0                0            0                   0                  0               0                           int end_i = min(start_i + _BLOCK_SIZE_ - 1, (int)size1);
+     18,723 ( 0.00%)  0           0                   0                0            0               6,241 ( 0.00%)         0               0                           int end_j = min(start_j + _BLOCK_SIZE_ - 1, (int)size2);
+          .           .           .                   .                .            .                   .                  .               .                           // std::cout << start_i << "_" << end_i << "|" << start_j << "_" << end_j << " num_x = " << block_num_x << " num_y = " << block_num_y << std::endl;
+     62,410 ( 0.00%)  1 ( 0.02%)  1 ( 0.03%)     43,687 ( 0.00%)     150 ( 0.00%)   1 ( 0.00%)     18,723 ( 0.01%)         0               0                           block_out = process_block(start_i, end_i, start_j, end_j, score, seq1, seq2);
+     24,964 ( 0.00%)  0           0              18,723 ( 0.00%)   6,090 ( 0.17%)   1 ( 0.00%)          0                  0               0                           if (std::get<0>(block_out) > maxScore) {
+    102,602 ( 0.00%)  0           0                  79 ( 0.00%)       4 ( 0.00%)   0              52,753 ( 0.03%)         9 ( 0.00%)      0                               #pragma omp critical
+          .           .           .                   .                .            .                   .                  .               .                               {
+        316 ( 0.00%)  0           0                 158 ( 0.00%)       0            0                  79 ( 0.00%)         0               0                                   maxScore = std::get<0>(block_out);
+        158 ( 0.00%)  1 ( 0.02%)  1 ( 0.03%)         79 ( 0.00%)       0            0                  79 ( 0.00%)         0               0                                   maxI = std::get<1>(block_out);
+        158 ( 0.00%)  0           0                  79 ( 0.00%)       0            0                  79 ( 0.00%)         0               0                                   maxJ = std::get<2>(block_out);
+          .           .           .                   .                .            .                   .                  .               .                               }
+          .           .           .                   .                .            .                   .                  .               .                           }
+          .           .           .                   .                .            .                   .                  .               .                       }
+          .           .           .                   .                .            .                   .                  .               .                   }
+          .           .           .                   .                .            .                   .                  .               .                   // std::cout << std::endl;  // New line for each anti-diagonal
+          .           .           .                   .                .            .                   .                  .               .               }
+          1 ( 0.00%)  0           0                   0                0            0                   1 ( 0.00%)         0               0               end = std::chrono::high_resolution_clock::now();
+          .           .           .                   .                .            .                   .                  .               .               duration = end - start;
+          .           .           .                   .                .            .                   .                  .               .               std::cout << "Matrix Processing Time: " << duration.count() << " seconds" << std::endl;
+          .           .           .                   .                .            .                   .                  .               .           
+          .           .           .                   .                .            .                   .                  .               .           
+          .           .           .                   .                .            .                   .                  .               .           
+          2 ( 0.00%)  0           0                   0                0            0                   2 ( 0.00%)         0               0               start = std::chrono::high_resolution_clock::now();
+          .           .           .                   .                .            .                   .                  .               .               // Backtrack to find the aligned sequences
+          .           .           .                   .                .            .                   .                  .               .               std::string alignedSeq1, alignedSeq2;
+          1 ( 0.00%)  1 ( 0.02%)  1 ( 0.03%)          1 ( 0.00%)       0            0                   0                  0               0               size_t i = maxI, j = maxJ;
+          .           .           .                   .                .            .                   .                  .               .               //BACKTRACKING
+     40,082 ( 0.00%)  2 ( 0.04%)  2 ( 0.05%)     10,020 ( 0.00%)   6,854 ( 0.19%)   5 ( 0.01%)          0                  0               0               while (i > 0 && j > 0 && score[i][j] > 0)
+          .           .           .                   .                .            .                   .                  .               .               {
+     55,110 ( 0.00%)  1 ( 0.02%)  1 ( 0.03%)     20,040 ( 0.00%)     157 ( 0.00%)   0              15,030 ( 0.01%)         0               0                   if (seq1[i - 1] == seq2[j - 1])
+          .           .           .                   .                .            .                   .                  .               .                   {
+          .           .           .                   .                .            .                   .                  .               .                       alignedSeq1 += seq1[i - 1];
+      9,980 ( 0.00%)  0           0               9,980 ( 0.00%)       0            0                   0                  0               0                       alignedSeq2 += seq2[j - 1];
+      4,990 ( 0.00%)  0           0                   0                0            0                   0                  0               0                       i--;
+      4,990 ( 0.00%)  0           0               4,990 ( 0.00%)       0            0                   0                  0               0                       j--;
+          .           .           .                   .                .            .                   .                  .               .                   }
+        100 ( 0.00%)  0           0                  40 ( 0.00%)      16 ( 0.00%)   0                   0                  0               0                   else if (score[i][j] == score[i - 1][j] + gap)
+          .           .           .                   .                .            .                   .                  .               .                   {
+          .           .           .                   .                .            .                   .                  .               .                       alignedSeq1 += seq1[i - 1];
+          .           .           .                   .                .            .                   .                  .               .                       alignedSeq2 += '-';
+         10 ( 0.00%)  0           0                   0                0            0                   0                  0               0                       i--;
+          .           .           .                   .                .            .                   .                  .               .                   }
+          .           .           .                   .                .            .                   .                  .               .                   else
+          .           .           .                   .                .            .                   .                  .               .                   {
+          .           .           .                   .                .            .                   .                  .               .                       alignedSeq1 += '-';
+         20 ( 0.00%)  0           0                  20 ( 0.00%)       0            0                   0                  0               0                       alignedSeq2 += seq2[j - 1];
+         10 ( 0.00%)  0           0                  10 ( 0.00%)       0            0                   0                  0               0                       j--;
+          .           .           .                   .                .            .                   .                  .               .                   }
+          .           .           .                   .                .            .                   .                  .               .               }
+          1 ( 0.00%)  1 ( 0.02%)  1 ( 0.03%)          0                0            0                   1 ( 0.00%)         0               0               end = std::chrono::high_resolution_clock::now();
+          .           .           .                   .                .            .                   .                  .               .               duration = end - start;
+          .           .           .                   .                .            .                   .                  .               .               std::cout << "Backtrack Matrix Time:  " << duration.count() << " seconds" << std::endl;
+          .           .           .                   .                .            .                   .                  .               .           
+          .           .           .                   .                .            .                   .                  .               .               // Reverse the aligned sequences
+          .           .           .                   .                .            .                   .                  .               .               std::reverse(alignedSeq1.begin(), alignedSeq1.end());
+          .           .           .                   .                .            .                   .                  .               .               std::reverse(alignedSeq2.begin(), alignedSeq2.end());
+          .           .           .                   .                .            .                   .                  .               .           
+          .           .           .                   .                .            .                   .                  .               .               return {alignedSeq1, alignedSeq2}; // Return the aligned sequences
+         13 ( 0.00%)  1 ( 0.02%)  1 ( 0.03%)          9 ( 0.00%)       2 ( 0.00%)   1 ( 0.00%)          0                  0               0           }
+--------------------------------------------------------------------------------
+Ir                   I1mr        ILmr        Dr                   D1mr             DLmr         Dw                  D1mw               DLmw            
+--------------------------------------------------------------------------------
+524,028,944 ( 0.31%) 42 ( 0.74%) 42 ( 1.11%) 128,641,069 ( 0.53%) 434,368 (12.03%) 292 ( 0.83%) 26,065,186 (13.51%) 1,682,770 (36.88%) 12,851 ( 0.77%)  events annotated
+
