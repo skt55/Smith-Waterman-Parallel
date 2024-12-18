@@ -160,45 +160,114 @@ column_btrack = np.array([
 ])
 column_tot = column_alloc + column_proc + column_btrack 
 
+# cuda
+cuda_alloc = np.array([
+    1.05E+00,
+    1.08E+00,
+    1.05E+00,
+    1.06E+00,
+    1.03E+00,
+    1.03E+00,
+    1.06E+00,
+    1.03E+00,
+    1.07E+00,
+    1.07E+00
+])
+cuda_proc = np.array([
+    1.30E-04,
+    1.97E-04,
+    4.06E-04,
+    1.74E-03,
+    1.99E-02,
+    1.15E-01,
+    2.31E-01,
+    5.28E-01,
+    1.76E+00,
+    2.76E+00
+])
+cuda_btrack = np.array([
+    3.15E-06,
+    3.57E-06,
+    6.33E-06,
+    3.30E-05,
+    2.60E-03,
+    6.01E-02,
+    2.46E-01,
+    1.50E+00,
+    1.35E+01,
+    2.40E+01
+])
+cuda_tot = cuda_alloc + cuda_proc + cuda_btrack 
 
 # Create the blocked plot
 plt.figure(figsize=(10, 5))
 plt.loglog(x, naive_alloc / blocked_alloc, label='Allocation', color='blue', linestyle='--', linewidth=1, marker="o")
 plt.loglog(x, naive_proc / blocked_proc, label='Processing', color='green', linestyle='--', linewidth=1, marker="o")
-plt.loglog(x, naive_btrack / blocked_btrack, label='Backtrack', color='purple', linestyle='--', linewidth=1, marker="o")
+plt.loglog(x, naive_btrack / blocked_btrack, label='Backtrace', color='purple', linestyle='--', linewidth=1, marker="o")
 plt.loglog(x, naive_tot / blocked_tot, label='Total', color='red', linewidth=2, marker="o")
-print(naive_proc / blocked_proc)
-print(naive_tot / blocked_tot)
+plt.axhline(y = 1, color = 'black', linestyle = (0, (5, 10))) 
 plt.xlabel('DNA Size (bp)', fontsize=12)
 plt.ylabel('Speedup', fontsize=12)
 plt.title('Speedup of Smith-Waterman (Naive vs Blocked + Flags)', fontsize=14)
 plt.legend()
 plt.savefig('x_Blocked_Speedup.png', dpi=300, bbox_inches='tight')
 
+# Create the antidiag plot
 plt.figure(figsize=(10, 5))
 plt.loglog(x, naive_alloc / antidiag_alloc, label='Allocation', color='blue', linestyle='--', linewidth=1, marker="o")
 plt.loglog(x, naive_proc / antidiag_proc, label='Processing', color='green', linestyle='--', linewidth=1, marker="o")
-plt.loglog(x, naive_btrack / antidiag_btrack, label='Backtrack', color='purple', linestyle='--', linewidth=1, marker="o")
+plt.loglog(x, naive_btrack / antidiag_btrack, label='Backtrace', color='purple', linestyle='--', linewidth=1, marker="o")
 plt.loglog(x, naive_tot / antidiag_tot, label='Total', color='red', linewidth=2, marker="o")
-print(naive_proc / antidiag_proc)
-print(naive_tot / antidiag_tot)
+plt.axhline(y = 1, color = 'black', linestyle = (0, (5, 10))) 
 plt.xlabel('DNA Size (bp)', fontsize=12)
 plt.ylabel('Speedup', fontsize=12)
 plt.title('Speedup of Smith-Waterman (Naive vs OpenMP Anti-Diagonal)', fontsize=14)
 plt.legend()
 plt.savefig('x_AntiDiag_Speedup.png', dpi=300, bbox_inches='tight')
 
+# Create the column plot
 plt.figure(figsize=(10, 5))
 plt.loglog(x, naive_alloc / column_alloc, label='Allocation', color='blue', linestyle='--', linewidth=1, marker="o")
 plt.loglog(x, naive_proc / column_proc, label='Processing', color='green', linestyle='--', linewidth=1, marker="o")
-plt.loglog(x, naive_btrack / column_btrack, label='Backtrack', color='purple', linestyle='--', linewidth=1, marker="o")
+plt.loglog(x, naive_btrack / column_btrack, label='Backtrace', color='purple', linestyle='--', linewidth=1, marker="o")
 plt.loglog(x, naive_tot / column_tot, label='Total', color='red', linewidth=2, marker="o")
-print(naive_proc / column_proc)
-print(naive_tot / column_tot)
+plt.axhline(y = 1, color = 'black', linestyle = (0, (5, 10))) 
 plt.xlabel('DNA Size (bp)', fontsize=12)
 plt.ylabel('Speedup', fontsize=12)
 plt.title('Speedup of Smith-Waterman (Naive vs OpenMP Column)', fontsize=14)
 plt.legend()
 plt.savefig('x_Column_Speedup.png', dpi=300, bbox_inches='tight')
 
+# Create the cuda plot
+plt.figure(figsize=(10, 5))
+plt.loglog(x, naive_alloc / cuda_alloc, label='Allocation', color='blue', linestyle='--', linewidth=1, marker="o")
+plt.loglog(x, naive_proc / cuda_proc, label='Processing', color='green', linestyle='--', linewidth=1, marker="o")
+plt.loglog(x, naive_btrack / cuda_btrack, label='Backtrace', color='purple', linestyle='--', linewidth=1, marker="o")
+plt.loglog(x, naive_tot / cuda_tot, label='Total', color='red', linewidth=2, marker="o")
+plt.axhline(y = 1, color = 'black', linestyle = (0, (5, 10))) 
+#print(naive_proc / cuda_proc)
+#print(max(naive_proc / cuda_proc))
+#print(naive_tot / cuda_tot)
+#print(max(naive_tot / cuda_tot))
+plt.xlabel('DNA Size (bp)', fontsize=12)
+plt.ylabel('Speedup', fontsize=12)
+plt.title('Speedup of Smith-Waterman (Naive vs CUDA)', fontsize=14)
+plt.legend()
+plt.savefig('x_Cuda_Speedup.png', dpi=300, bbox_inches='tight')
 
+# Create the comprehensive plot
+plt.figure(figsize=(10, 5))
+plt.loglog(x, naive_proc / blocked_proc, label='Blocked+Flags Processing', color='blue', linestyle='--', linewidth=1, marker="o")
+plt.loglog(x, naive_tot / blocked_tot, label='Blocked+Flags Total', color='blue', linewidth=1, marker="o")
+plt.loglog(x, naive_proc / antidiag_proc, label='AntiDiag OpenMP Processing', color='red', linestyle='--', linewidth=1, marker="o")
+plt.loglog(x, naive_tot / antidiag_tot, label='AntiDiag OpenMP Total', color='red', linewidth=1, marker="o")
+plt.loglog(x, naive_proc / column_proc, label='Column OpenMP Processing', color='purple', linestyle='--', linewidth=1, marker="o")
+plt.loglog(x, naive_tot / column_tot, label='Column OpenMP Total', color='purple', linewidth=1, marker="o")
+plt.loglog(x, naive_proc / cuda_proc, label='CUDA Processing', color='green', linestyle='--', linewidth=1, marker="o")
+plt.loglog(x, naive_tot / cuda_tot, label='CUDA Total', color='green', linewidth=1, marker="o")
+plt.axhline(y = 1, color = 'black', linestyle = (0, (5, 10))) 
+plt.xlabel('DNA Size (bp)', fontsize=12)
+plt.ylabel('Speedup', fontsize=12)
+plt.title('Speedup of Smith-Waterman (Naive vs Optimized Implementations)', fontsize=14)
+plt.legend()
+plt.savefig('x_All_Speedup.png', dpi=300, bbox_inches='tight')

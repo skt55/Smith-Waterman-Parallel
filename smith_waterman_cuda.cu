@@ -178,6 +178,10 @@ std::pair<std::string, std::string> smithWaterman(
     std::reverse(alignedSeq1.begin(), alignedSeq1.end());
     std::reverse(alignedSeq2.begin(), alignedSeq2.end());
     std::cout << "Total cuda time is " << duration.count() + duration1.count() + duration2.count() + duration3.count() + duration6.count()<< "seconds" << std::endl;
+    
+    std::cout << "Assigning + Copy Data:     " << duration.count() + duration1.count() << " seconds" << std::endl;
+    std::cout << "Kernel Time:           " << duration2.count() << " seconds" << std::endl;
+    std::cout << "Backtrace Copy Data:     " << duration4.count() + duration5.count() << " seconds" << std::endl;
     return {alignedSeq1, alignedSeq2}; // Return the aligned sequences
 }
 
