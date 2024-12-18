@@ -9,3 +9,5 @@ base
 openmp
 blocked
 column
+cuda
+*.png

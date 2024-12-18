@@ -155,25 +155,25 @@ std::pair<std::string, std::string> smithWaterman(
     auto start8 = std::chrono::high_resolution_clock::now();
 
     std::chrono::duration<double> duration = start2 - start1;
-    std::cout << "Memory1 time taken: " << duration.count() << " seconds" << std::endl;
+    std::cout << "Memory1:           " << duration.count() << " seconds" << std::endl;
 
     std::chrono::duration<double> duration1 = start3 - start2;
-    std::cout << "Memset/cpy time taken: " << duration1.count() << " seconds" << std::endl;
+    std::cout << "Memset/cpy:        " << duration1.count() << " seconds" << std::endl;
 
     std::chrono::duration<double> duration2 = start4 - start3;
     std::cout << "kernel time taken: " << duration2.count() << " seconds" << std::endl;
 
     std::chrono::duration<double> duration3 = start5 - start4;
-    std::cout << "cpy2 time taken: " << duration3.count() << " seconds" << std::endl;
+    std::cout << "cpy2 time taken:   " << duration3.count() << " seconds" << std::endl;
 
     std::chrono::duration<double> duration4 = start6 - start5;
-    std::cout << "to get max indices time taken: " << duration4.count() << " seconds" << std::endl;
+    std::cout << "max indices fetch: " << duration4.count() << " seconds" << std::endl;
 
     std::chrono::duration<double> duration5 = start7 - start6;
-    std::cout << "backtrack time taken: " << duration5.count() << " seconds" << std::endl;
+    std::cout << "backtrack time:    " << duration5.count() << " seconds" << std::endl;
 
      std::chrono::duration<double> duration6 = start8 - start7;
-    std::cout << "cuda free time taken: " << duration6.count() << " seconds" << std::endl;
+    std::cout << "cuda free:        " << duration6.count() << " seconds" << std::endl;
     // Reverse the aligned sequences
     std::reverse(alignedSeq1.begin(), alignedSeq1.end());
     std::reverse(alignedSeq2.begin(), alignedSeq2.end());
